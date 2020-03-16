@@ -6,6 +6,8 @@ This project uses [Semantic Versioning][sv].
 ## [Unreleased][new]
 
 ### Added
+- Add a function to initialize weights and biases for all layers of the neural
+  network.
 
 ### Changed
 
