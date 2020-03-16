@@ -8,6 +8,8 @@ This project uses [Semantic Versioning][sv].
 ### Added
 - Add a function to initialize weights and biases for all layers of the neural
   network.
+- Add a function to compute the linear part of forward propagation for a given
+  layer.
 
 ### Changed
 
