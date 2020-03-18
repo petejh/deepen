@@ -12,6 +12,8 @@ This project uses [Semantic Versioning][sv].
   given layer.
 - Add `layer_forward()` to compute forward propagation through a single layer.
 - Add `sigmoid()` and `relu()` activation functions.
+- Add `model_forward()` to compute forward propagation for the complete model
+  comprising (L-1) ReLU units followed by a single, sigmoid unit.
 
 ### Changed
 
