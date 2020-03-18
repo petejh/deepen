@@ -8,8 +8,10 @@ This project uses [Semantic Versioning][sv].
 ### Added
 - Add a function to initialize weights and biases for all layers of the neural
   network.
-- Add a function to compute the linear part of forward propagation for a given
-  layer.
+- Add `linear_forward()`to compute the linear part of forward propagation for a
+  given layer.
+- Add `layer_forward()` to compute forward propagation through a single layer.
+- Add `sigmoid()` and `relu()` activation functions.
 
 ### Changed
 
