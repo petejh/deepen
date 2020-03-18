@@ -14,6 +14,8 @@ This project uses [Semantic Versioning][sv].
 - Add `sigmoid()` and `relu()` activation functions.
 - Add `model_forward()` to compute forward propagation for the complete model
   comprising (L-1) ReLU units followed by a single, sigmoid unit.
+- Add `compute_cost()` to calculate the cross-entropy cost from the model
+  predictions.
 
 ### Changed
 

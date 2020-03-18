@@ -141,3 +141,29 @@ def L_model_forward(X, parameters):
     caches.append(cache)
 
     return Y_hat, caches
+
+def compute_cost(Y_hat, Y):
+    """Compute the cross-entropy cost.
+
+    .. math:: $$-\frac{1}{m} \sum\limits_{i = 1}^{m} (y^{(i)}\log\left(a^{[L] (i)}\right) + (1-y^{(i)})\log\left(1- a^{[L](i)}\right))
+
+    Parameters
+    ----------
+    Y_hat : ndarray
+        Vector of prediction probabilities from `model_forward()` of shape
+        (1, number of examples).
+    Y : ndarray
+        Vector of true values of shape (1, number of examples).
+
+    Returns
+    -------
+    cost : list of int
+        Cross-entropy cost.
+    """
+
+    m = Y.shape[1]
+
+    cost = (-1/m) * np.sum(np.multiply(Y, np.log(Y_hat)) + np.multiply((1-Y), np.log(1-Y_hat)))
+    cost = np.squeeze(cost)
+
+    return cost
