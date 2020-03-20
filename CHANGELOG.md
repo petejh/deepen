@@ -16,6 +16,7 @@ This project uses [Semantic Versioning][sv].
   comprising (L-1) ReLU units followed by a single, sigmoid unit.
 - Add `compute_cost()` to calculate the cross-entropy cost from the model
   predictions.
+- Add unit tests for `initialize_params()`.
 
 ### Changed
 
