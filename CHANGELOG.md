@@ -17,6 +17,7 @@ This project uses [Semantic Versioning][sv].
 - Add `compute_cost()` to calculate the cross-entropy cost from the model
   predictions.
 - Add unit tests for `initialize_params()`.
+- Add unit tests for `linear_forward()`.
 
 ### Changed
 

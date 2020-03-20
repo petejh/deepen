@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 
 from deepen import model
 
@@ -47,6 +48,31 @@ class DeepenModelInitializeParamsTest(unittest.TestCase):
         for l in range(1, self.num_dims):
             with self.subTest(l = l):
                 self.assertFalse(params['b' + str(l)].any())
+
+class DeepenModelLinearForwardTest(unittest.TestCase):
+    def setUp(self):
+        self.A = np.array([[1], [2]])
+        self.W = np.array([[1, 2], [3, 4], [5, 6]])
+        self.b = np.array([[1], [2], [3]])
+        self.Z_expected = np.array([[6], [13], [20]])
+
+    def test_Z_has_the_correct_shape(self):
+        Z, _ = model.linear_forward(self.A, self.W, self.b)
+
+        self.assertEqual(Z.shape, self.Z_expected.shape)
+
+    def test_Z_is_linear_combination_of_the_inputs(self):
+        Z, _ = model.linear_forward(self.A, self.W, self.b)
+
+        self.assertTrue(np.array_equal(Z, self.Z_expected))
+
+    def test_cache_contains_the_inputs(self):
+        _, cache = model.linear_forward(self.A, self.W, self.b)
+
+        subtests = zip(cache, (self.A, self.W, self.b), ('A', 'W', 'b'))
+        for cached, param, description in subtests:
+            with self.subTest(parameter=description):
+                self.assertTrue(np.array_equal(cached, param))
 
 if __name__ == '__main__':
     unittest.main()
