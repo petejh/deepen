@@ -18,6 +18,7 @@ This project uses [Semantic Versioning][sv].
   predictions.
 - Add unit tests for `initialize_params()`.
 - Add unit tests for `linear_forward()`.
+- Add unit tests for `relu()` and `sigmoid()`.
 
 ### Changed
 
