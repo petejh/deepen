@@ -99,7 +99,7 @@ def layer_forward(A_prev, W, b, activation):
 
     return A, cache
 
-def L_model_forward(X, parameters):
+def model_forward(X, parameters):
     """Compute forward propagation for [LINEAR->RELU]*(L-1) -> [LINEAR->SIGMOID].
 
     Parameters
@@ -112,10 +112,10 @@ def L_model_forward(X, parameters):
     Returns
     -------
     Y_hat : ndarray
-        Vector of post-activation values for layer L-1 of shape (1, number of
+        Vector of prediction probabilities of shape (1, number of
         examples).
-    caches : list of {list of {dict of {str: ndarray}}}
-        The L-1 `cache` results from `layer_forward()`.
+    caches : list of (tuple of (tuple of ndarray, ndarray))
+        The L `cache` results from `layer_forward()`.
     """
 
     caches = []

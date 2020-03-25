@@ -135,5 +135,52 @@ class DeepenModelLayerForwardTest(unittest.TestCase):
 
             sigmoid.assert_called_once()
 
+class DeepenModelModelForwardTest(unittest.TestCase):
+    def setUp(self):
+        self.X = np.ones((2, 1))
+
+        self.W1 = np.ones((3, 2))
+        self.W2 = np.ones((3, 3))
+        self.W3 = np.ones((1, 3))
+        self.b1 = np.zeros((3, 1))
+        self.b2 = np.zeros((3, 1))
+        self.b3 = np.zeros((1, 1))
+        self.params = {
+            'W1': self.W1,
+            'b1': self.b1,
+            'W2': self.W2,
+            'b2': self.b2,
+            'W3': self.W3,
+            'b3': self.b3
+        }
+
+    def test_cache_contains_L_caches(self):
+        _, caches = model.model_forward(self.X, self.params)
+
+        self.assertTrue(len(caches) == len(self.params) // 2)
+
+    def test_Y_hat_has_the_correct_shape(self):
+        Y_hat, _ = model.model_forward(self.X, self.params)
+
+        self.assertTrue(Y_hat.shape == (1, self.X.shape[1]))
+
+    def test_calls_relu_activation_L_minus_1_times(self):
+        with unittest.mock.patch(
+            'deepen.model.relu',
+            wraps = model.relu
+        ) as relu_spy:
+            model.model_forward(self.X, self.params)
+
+            self.assertTrue(relu_spy.call_count == len(self.params) // 2 - 1)
+
+    def test_calls_sigmoid_activation_one_time(self):
+        with unittest.mock.patch(
+            'deepen.model.sigmoid',
+            wraps = model.sigmoid
+        ) as sigmoid_spy:
+            model.model_forward(self.X, self.params)
+
+            sigmoid_spy.assert_called_once()
+
 if __name__ == '__main__':
     unittest.main()

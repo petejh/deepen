@@ -20,6 +20,7 @@ This project uses [Semantic Versioning][sv].
 - Add unit tests for `linear_forward()`.
 - Add unit tests for `relu()` and `sigmoid()`.
 - Add unit tests for `layer_forward()`.
+- Add unit tests for `model_forward()`.
 
 ### Changed
 
