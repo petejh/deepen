@@ -39,3 +39,47 @@ def relu(Z):
     A = np.maximum(0, Z)
 
     return A, Z
+def relu_backward(dA, cache):
+    """Compute backward propagation through the RELU activation function.
+
+    Parameters
+    ----------
+    dA : ndarray
+        Post-activation gradients for the current layer.
+    cache : ndarray
+        Stored `Z` from `relu()`.
+
+    Returns
+    -------
+    dZ : ndarray
+        Gradients of the cost with respect to `Z`.
+    """
+
+    Z = cache
+
+    dZ = np.array(dA, copy=True)
+    dZ[Z <= 0] = 0
+
+    return dZ
+def relu_backward(dA, cache):
+    """Compute backward propagation through the RELU activation function.
+
+    Parameters
+    ----------
+    dA : ndarray
+        Post-activation gradients for the current layer.
+    cache : ndarray
+        Stored `Z` from `relu()`.
+
+    Returns
+    -------
+    dZ : ndarray
+        Gradients of the cost with respect to `Z`.
+    """
+
+    Z = cache
+
+    dZ = np.array(dA, copy=True)
+    dZ[Z <= 0] = 0
+
+    return dZ

@@ -6,6 +6,7 @@ This project uses [Semantic Versioning][sv].
 ## [Unreleased][new]
 
 ### Added
+- Add `relu_backward()` to compute backward propagation through a ReLU unit.
 
 ### Changed
 
