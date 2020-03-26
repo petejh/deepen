@@ -50,5 +50,21 @@ class DeepenActivationSigmoidTest(unittest.TestCase):
 
         self.assertTrue(np.array_equal(cache, self.Z))
 
+class DeepenActivationSigmoidBackwardTest(unittest.TestCase):
+    def setUp(self):
+        self.Z = np.array([[-0.8], [0], [0.9]])
+        self.dA = np.ones((3, 1))
+        self.dZ_expected = np.array([[0.2139097], [0.25], [0.20550031]])
+
+    def test_dZ_has_the_correct_shape(self):
+        dZ = activation.sigmoid_backward(self.dA, self.Z)
+
+        self.assertTrue(dZ.shape == self.dZ_expected.shape)
+
+    def test_returns_the_gradient_of_the_input(self):
+        dZ = activation.sigmoid_backward(self.dA, self.Z)
+
+        self.assertTrue(np.allclose(dZ, self.dZ_expected))
+
 if __name__ == '__main__':
     unittest.main()
