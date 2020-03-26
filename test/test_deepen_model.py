@@ -182,5 +182,21 @@ class DeepenModelModelForwardTest(unittest.TestCase):
 
             sigmoid_spy.assert_called_once()
 
+class DeepenModelComputeCostTest(unittest.TestCase):
+    def setUp(self):
+        self.Y_hat = np.array([[0.8, 0.1, 0.9]])
+        self.Y = np.array([[1, 0, 1]])
+        self.expected_cost = 0.14462152
+
+    def test_cost_has_the_correct_shape(self):
+        cost = model.compute_cost(self.Y_hat, self.Y)
+
+        self.assertTrue(cost.shape == ())
+
+    def test_computes_the_cost(self):
+        cost = model.compute_cost(self.Y_hat, self.Y)
+
+        self.assertAlmostEqual(cost, self.expected_cost)
+
 if __name__ == '__main__':
     unittest.main()
