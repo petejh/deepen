@@ -77,7 +77,7 @@ class DeepenModelLinearForwardTest(unittest.TestCase):
 
         subtests = zip(cache, self.params, ('A', 'W', 'b'))
         for cached, param, description in subtests:
-            with self.subTest(parameter=description):
+            with self.subTest(parameter = description):
                 self.assertTrue(np.array_equal(cached, param))
 
 class DeepenModelLayerForwardTest(unittest.TestCase):
@@ -90,10 +90,6 @@ class DeepenModelLayerForwardTest(unittest.TestCase):
 
         # Z = W·A + b
         self.Z = np.array([[6], [13], [20]])
-        # relu(Z)
-        self.relu = np.array([[6], [13], [20]])
-        # sigmoid(Z)
-        self.sigmoid = np.array([[0.99752738], [0.99999774], [1.0]])
 
     def test_A_has_the_correct_shape(self):
         A, _ = model.layer_forward(*self.params, 'relu')
@@ -105,7 +101,7 @@ class DeepenModelLayerForwardTest(unittest.TestCase):
 
         subtests = zip(linear_cache, self.params, ('A', 'W', 'b'))
         for cached, param, description in subtests:
-            with self.subTest(parameter=description):
+            with self.subTest(parameter = description):
                 self.assertTrue(np.array_equal(cached, param))
 
     def test_activation_cache_has_the_correct_shape(self):
@@ -114,26 +110,22 @@ class DeepenModelLayerForwardTest(unittest.TestCase):
         self.assertTrue(activation_cache.shape == self.Z.shape)
 
     def test_calls_relu_activation(self):
-        relu_returns = (self.relu, self.Z)
-
         with unittest.mock.patch(
             'deepen.model.relu',
-            return_value = relu_returns
-        ) as relu:
+            wraps = model.relu
+        ) as relu_spy:
             model.layer_forward(*self.params, 'relu')
 
-            relu.assert_called_once()
+            relu_spy.assert_called_once()
 
     def test_calls_sigmoid(self):
-        sigmoid_returns = (self.sigmoid, self.Z)
-
         with unittest.mock.patch(
             'deepen.model.sigmoid',
-            return_value = sigmoid_returns
-        ) as sigmoid:
+            wraps = model.sigmoid
+        ) as sigmoid_spy:
             model.layer_forward(*self.params, 'sigmoid')
 
-            sigmoid.assert_called_once()
+            sigmoid_spy.assert_called_once()
 
 class DeepenModelModelForwardTest(unittest.TestCase):
     def setUp(self):
