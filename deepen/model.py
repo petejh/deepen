@@ -167,3 +167,35 @@ def compute_cost(Y_hat, Y):
     cost = np.squeeze(cost)
 
     return cost
+
+def linear_backward(dZ, cache):
+    """Calculate the linear portion of backward propagation for a single layer.
+
+    Parameters
+    ----------
+    dZ : ndarray
+        Gradient of the cost with respect to the linear output of layer l.
+    cache : tuple of ndarray
+        Stored `A`, `W`, `b` from `linear_forward()`.
+
+    Returns
+    -------
+    dA_prev : ndarray
+        Gradient of the cost with respect to the activation of the previous
+        layer, l-1. Shape of `cache['A']`.
+    dW : ndarray
+        Gradient of the cost with respect to W for the current layer, l. Shape
+        of `cache['W']`.
+    db : ndarray
+        Gradient of the cost with respect to b for the current layer, l. Shape
+        of `cache['b']`.
+    """
+
+    A_prev, W, b = cache
+    m = A_prev.shape[1]
+
+    dW = (1/m) * np.dot(dZ, A_prev.T)
+    db = (1/m) * np.sum(dZ, axis=1, keepdims=True)
+    dA_prev = np.dot(W.T, dZ)
+
+    return dA_prev, dW, db

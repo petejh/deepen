@@ -190,5 +190,36 @@ class DeepenModelComputeCostTest(unittest.TestCase):
 
         self.assertAlmostEqual(cost, self.expected_cost)
 
+class DeepenModelLinearBackward(unittest.TestCase):
+    def setUp(self):
+        self.A_prev = np.array([[1], [2]])
+        self.W = np.array([[1, 2], [3, 4], [5, 6]])
+        self.b = np.array([[1], [2], [3]])
+        self.dZ = np.array([[1], [2], [3]])
+
+        self.params = (self.dZ, (self.A_prev, self.W, self.b))
+
+        self.dA_expected = np.array([[22], [28]])
+        self.dW_expected = np.array([[1, 2], [2, 4], [3, 6]])
+        self.db_expected = np.array([[1], [2], [3]])
+
+        self.expected = (self.dA_expected, self.dW_expected, self.db_expected)
+
+    def test_gradients_have_the_correct_shape(self):
+        dA, dW, db = model.linear_backward(*self.params)
+
+        subtests = zip((dA, dW, db), self.expected, ('dA', 'dW', 'db'))
+        for grad, expected, description in subtests:
+            with self.subTest(gradient = description):
+                self.assertTrue(grad.shape == expected.shape)
+
+    def test_computes_the_gradients(self):
+        dA, dW, db = model.linear_backward(*self.params)
+
+        subtests = zip((dA, dW, db), self.expected, ('dA', 'dW', 'db'))
+        for grad, expected, description in subtests:
+            with self.subTest(gradient = description):
+                self.assertTrue(np.array_equal(grad, expected))
+
 if __name__ == '__main__':
     unittest.main()

@@ -8,6 +8,8 @@ This project uses [Semantic Versioning][sv].
 ### Added
 - Add `relu_backward()` to compute backward propagation through a ReLU unit.
 - Add `sigmoid_backward()` to compute backward propagation through a sigmoid unit.
+- Add `linear_backward()` to compute the linear part of backward propagation for
+  a given layer.
 
 ### Changed
 
