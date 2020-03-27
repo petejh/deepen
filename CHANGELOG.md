@@ -10,6 +10,7 @@ This project uses [Semantic Versioning][sv].
 - Add `sigmoid_backward()` to compute backward propagation through a sigmoid unit.
 - Add `linear_backward()` to compute the linear part of backward propagation for
   a given layer.
+- Add `layer_backward()` to compute backward propagation for a single layer.
 
 ### Changed
 

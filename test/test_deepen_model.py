@@ -221,5 +221,55 @@ class DeepenModelLinearBackward(unittest.TestCase):
             with self.subTest(gradient = description):
                 self.assertTrue(np.array_equal(grad, expected))
 
+class DeepenModelLayerBackwardTest(unittest.TestCase):
+    def setUp(self):
+        self.dA = np.ones((3,1))
+
+        self.A= np.array([[1], [2]])
+        self.W = np.array([[1, 2], [3, 4], [5, 6]])
+        self.b = np.array([[1], [2], [3]])
+        self.Z = np.array([[6], [13], [20]])
+        self.cache = ((self.A, self.W, self.b), self.Z)
+
+        self.dA_expected = np.array([[9.], [12.]])
+        self.dW_expected = np.array([[1., 2.], [1., 2.], [1., 2.]])
+        self.db_expected = np.array([[1.], [1.], [1.]])
+
+        self.expected = (self.dA_expected, self.dW_expected, self.db_expected)
+
+    def test_gradients_have_the_correct_shape(self):
+        dA, dW, db = model.layer_backward(self.dA, self.cache, 'relu')
+
+        subtests = zip((dA, dW, db), self.expected, ('dA', 'dW', 'db'))
+        for grad, expected, description in subtests:
+            with self.subTest(gradient = description):
+                self.assertTrue(grad.shape == expected.shape)
+
+    def test_computes_the_gradients(self):
+        dA, dW, db = model.layer_backward(self.dA, self.cache, 'relu')
+
+        subtests = zip((dA, dW, db), self.expected, ('dA', 'dW', 'db'))
+        for grad, expected, description in subtests:
+            with self.subTest(gradient = description):
+                self.assertTrue(np.array_equal(grad, expected))
+
+    def test_calls_relu_backward(self):
+        with unittest.mock.patch(
+            'deepen.model.relu_backward',
+            wraps = model.relu_backward
+        ) as relu_spy:
+            model.layer_backward(self.dA, self.cache, 'relu')
+
+            relu_spy.assert_called_once()
+
+    def test_calls_sigmoid_backward(self):
+        with unittest.mock.patch(
+            'deepen.model.sigmoid_backward',
+            wraps = model.sigmoid_backward
+        ) as sigmoid_spy:
+            model.layer_backward(self.dA, self.cache, 'sigmoid')
+
+            sigmoid_spy.assert_called_once()
+
 if __name__ == '__main__':
     unittest.main()

@@ -1,5 +1,5 @@
 import numpy as np
-from deepen.activation import relu, sigmoid
+from deepen.activation import relu, relu_backward, sigmoid, sigmoid_backward
 
 def initialize_params(layer_dims):
     """Create and initialize the params of an L-layer neural network.
@@ -197,5 +197,41 @@ def linear_backward(dZ, cache):
     dW = (1/m) * np.dot(dZ, A_prev.T)
     db = (1/m) * np.sum(dZ, axis=1, keepdims=True)
     dA_prev = np.dot(W.T, dZ)
+
+    return dA_prev, dW, db
+
+def layer_backward(dA, cache, activation):
+    """Compute backward propagation for a single layer.
+
+    Parameters
+    ----------
+    dA: ndarray
+        Post-activation gradient for current layer, l.
+    cache : tuple of (tuple of ndarray, ndarray)
+        Stored `(linear_cache, activation_cache)` from `layer_forward()`.
+    activation : str {"relu", "sigmoid"}
+        Activation function to be used in this layer.
+
+    Returns
+    -------
+    dA_prev : ndarray
+        Gradient of the cost with respect to the activation of the previous
+        layer, l-1. Shape of `cache['A']`.
+    dW : ndarray
+        Gradient of the cost with respect to W for the current layer, l. Shape
+        of `cache['W']`.
+    db : ndarray
+        Gradient of the cost with respect to b for the current layer, l. Shape
+        of `cache['b']`.
+    """
+
+    linear_cache, activation_cache = cache
+
+    if activation == "relu":
+        dZ = relu_backward(dA, activation_cache)
+        dA_prev, dW, db = linear_backward(dZ, linear_cache)
+    elif activation == "sigmoid":
+        dZ = sigmoid_backward(dA, activation_cache)
+        dA_prev, dW, db = linear_backward(dZ, linear_cache)
 
     return dA_prev, dW, db
