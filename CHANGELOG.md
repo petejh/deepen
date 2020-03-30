@@ -13,6 +13,8 @@ This project uses [Semantic Versioning][sv].
 - Add `layer_backward()` to compute backward propagation for a single layer.
 - Add `model_backward()` to compute backward propagation for the complete model
   comprising [L-1] ReLU units followed by a single, sigmoid unit.
+- Add `update_params()` to calculate new weights and biases for each layer after
+  a complete forward and backward pass through the model.
 
 ### Changed
 

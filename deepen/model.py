@@ -284,3 +284,34 @@ def model_backward(Y_hat, Y, caches):
         grads["db" + str(l + 1)] = db_temp
 
     return grads
+
+def update_params(params, grads, learning_rate):
+    """Update parameters using gradient descent.
+
+    Parameters
+    ----------
+    params : dict of {str: ndarray}
+        Initialized parameters from `intialize_params()`.
+    grads : dict of {str: ndarray}
+        Gradients from `model_backward()`.
+    learning_rate : float in (0, 1)
+        Learning rate for the model.
+
+    Returns
+    -------
+    params : dict of {str: ndarray}
+        Updated parameters.
+
+        `Wl` : ndarray
+            Updated weights matrix.
+        `bl` : ndarray
+            Updated biases vector.
+    """
+
+    L = len(params) // 2
+
+    for l in range(L):
+        params["W" + str(l+1)] -= learning_rate * grads["dW" + str(l+1)]
+        params["b" + str(l+1)] -= learning_rate * grads["db" + str(l+1)]
+
+    return params

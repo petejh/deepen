@@ -351,5 +351,66 @@ class DeepenModelModelBackwardTest(unittest.TestCase):
 
             sigmoid_spy.assert_called_once()
 
+class DeepenModelUpdateParamsTest(unittest.TestCase):
+    def setUp(self):
+        self.W1 = np.ones((3, 2))
+        self.W2 = np.ones((3, 3))
+        self.W3 = np.ones((1, 3))
+        self.b1 = np.zeros((3, 1))
+        self.b2 = np.zeros((3, 1))
+        self.b3 = np.zeros((1, 1))
+        self.params = {
+            'W1': self.W1,
+            'b1': self.b1,
+            'W2': self.W2,
+            'b2': self.b2,
+            'W3': self.W3,
+            'b3': self.b3
+        }
+
+        self.grads = {
+            'dA2': np.array([[-1.52299795e-08], [-1.52299795e-08], [-1.52299795e-08]]),
+            'dW3': np.array([[-9.1379877e-08, -9.1379877e-08, -9.1379877e-08]]),
+            'db3': np.array([[-1.52299795e-08]]),
+            'dA1': np.array([[-4.56899385e-08], [-4.56899385e-08], [-4.56899385e-08]]),
+            'dW2': np.array([
+                [-3.0459959e-08, -3.0459959e-08, -3.0459959e-08],
+                [-3.0459959e-08, -3.0459959e-08, -3.0459959e-08],
+                [-3.0459959e-08, -3.0459959e-08, -3.0459959e-08]
+            ]),
+            'db2': np.array([[-1.52299795e-08], [-1.52299795e-08], [-1.52299795e-08]]),
+            'dA0': np.array([[-1.37069815e-07], [-1.37069815e-07]]),
+            'dW1': np.array([
+                [-4.56899385e-08, -4.56899385e-08],
+                [-4.56899385e-08, -4.56899385e-08],
+                [-4.56899385e-08, -4.56899385e-08]
+            ]),
+            'db1': np.array([[-4.56899385e-08], [-4.56899385e-08], [-4.56899385e-08]])
+        }
+
+        self.learning_rate = 0.5
+
+        self.params_expected = {
+            'W1': self.W1 - self.learning_rate * self.grads['dW1'],
+            'b1': self.b1 - self.learning_rate * self.grads['db1'],
+            'W2': self.W2 - self.learning_rate * self.grads['dW2'],
+            'b2': self.b2 - self.learning_rate * self.grads['db2'],
+            'W3': self.W3 - self.learning_rate * self.grads['dW3'],
+            'b3': self.b3 - self.learning_rate * self.grads['db3']
+        }
+
+    def test_returns_L_params(self):
+        params = model.update_params(self.params, self.grads, self.learning_rate)
+
+        self.assertTrue(len(params) == len(self.params))
+
+    def test_params_are_updated(self):
+        params = model.update_params(self.params, self.grads, self.learning_rate)
+
+        test_labels = ('W1', 'b1', 'W2', 'b2', 'W3', 'b3')
+        for param in test_labels:
+            with self.subTest(param = param):
+                self.assertTrue(np.allclose(params[param], self.params_expected[param]))
+
 if __name__ == '__main__':
     unittest.main()
