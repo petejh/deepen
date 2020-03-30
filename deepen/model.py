@@ -235,3 +235,52 @@ def layer_backward(dA, cache, activation):
         dA_prev, dW, db = linear_backward(dZ, linear_cache)
 
     return dA_prev, dW, db
+
+def model_backward(Y_hat, Y, caches):
+    """Compute backward propagation for [LINEAR->RELU]*(L-1) -> [LINEAR->SIGMOID].
+
+    Parameters
+    ----------
+    Y_hat : ndarray
+        Vector of prediction probabilities from `model_forward()` of shape
+        (1, number of examples).
+    Y : ndarray
+        Vector of true values of shape (1, number of examples).
+    caches : list of (tuple of (tuple of ndarray, ndarray))
+        Stored results of `model_forward()`.
+
+    Returns
+    -------
+    grads : dict of {str: ndarray}
+        Gradients for layer `l` in `range(L-1)`.
+
+        dAl : ndarray
+            Gradient of the activations for layer `l`.
+        dWl : ndarray
+            Gradient of the weights for layer `l`.
+        dbl : ndarray
+            Gradient of the biases for layer `l`.
+    """
+
+    grads = {}
+    L = len(caches)
+    m = Y_hat.shape[1]
+    Y = Y.reshape(Y_hat.shape)
+
+    dY_hat = -(np.divide(Y, Y_hat) - np.divide(1-Y, 1-Y_hat))
+
+    current_cache = caches[L-1]
+    grads["dA" + str(L-1)], grads["dW" + str(L)], grads["db" + str(L)] = (
+        layer_backward(dY_hat, current_cache, "sigmoid")
+    )
+
+    for l in reversed(range(L-1)):
+        current_cache = caches[l]
+        dA_prev_temp, dW_temp, db_temp = (
+            layer_backward(grads["dA" + str(l+1)], current_cache, "relu")
+        )
+        grads["dA" + str(l)] = dA_prev_temp
+        grads["dW" + str(l + 1)] = dW_temp
+        grads["db" + str(l + 1)] = db_temp
+
+    return grads

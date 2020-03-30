@@ -271,5 +271,85 @@ class DeepenModelLayerBackwardTest(unittest.TestCase):
 
             sigmoid_spy.assert_called_once()
 
+class DeepenModelModelBackwardTest(unittest.TestCase):
+    def setUp(self):
+        self.Y_hat = np.array([[0.99999998]])
+        self.Y = np.array([[1]])
+
+        self.X = np.ones((2, 1))
+        self.W1 = np.ones((3, 2))
+        self.b1 = np.zeros((3, 1))
+        self.A1 = np.array([[2.], [2.], [2.]])
+        self.W2 = np.ones((3, 3))
+        self.b2 = np.zeros((3, 1))
+        self.A2 = np.array([[6.], [6.], [6.]])
+        self.W3 = np.ones((1, 3))
+        self.b3 = np.zeros((1, 1))
+        self.A3 = np.array([[18.]])
+        self.caches = [
+            ((self.X, self.W1, self.b1), self.A1),
+            ((self.A1, self.W2, self.b2), self.A2),
+            ((self.A2, self.W3, self.b3), self.A3)
+        ]
+
+        self.grads_expected = {
+            "dA2": np.array([[-1.52299795e-08], [-1.52299795e-08], [-1.52299795e-08]]),
+            "dW3": np.array([[-9.1379877e-08, -9.1379877e-08, -9.1379877e-08]]),
+            "db3": np.array([[-1.52299795e-08]]),
+            "dA1": np.array([[-4.56899385e-08], [-4.56899385e-08], [-4.56899385e-08]]),
+            "dW2": np.array(
+                [[-3.0459959e-08, -3.0459959e-08, -3.0459959e-08],
+                [-3.0459959e-08, -3.0459959e-08, -3.0459959e-08],
+                [-3.0459959e-08, -3.0459959e-08, -3.0459959e-08]]
+            ),
+            "db2": np.array([[-1.52299795e-08], [-1.52299795e-08], [-1.52299795e-08]]),
+            "dA0": np.array([[-1.37069815e-07], [-1.37069815e-07]]),
+            "dW1": np.array(
+                [[-4.56899385e-08, -4.56899385e-08],
+                [-4.56899385e-08, -4.56899385e-08],
+                [-4.56899385e-08, -4.56899385e-08]]
+            ),
+            "db1": np.array([[-4.56899385e-08], [-4.56899385e-08], [-4.56899385e-08]])
+        }
+
+    def test_grads_has_the_correct_length(self):
+        grads = model.model_backward(self.Y_hat, self.Y, self.caches)
+
+        self.assertTrue(len(grads) == len(self.grads_expected))
+
+    def test_grads_have_the_correct_shape(self):
+        grads = model.model_backward(self.Y_hat, self.Y, self.caches)
+
+        test_labels = ('dA2', 'dW3', 'db3', 'dA1', 'dW2', 'db2', 'dA0', 'dW1', 'db1')
+        for gradient in test_labels:
+            with self.subTest(gradient = gradient):
+                self.assertTrue(grads[gradient].shape == self.grads_expected[gradient].shape)
+
+    def test_computes_the_gradients(self):
+        grads = model.model_backward(self.Y_hat, self.Y, self.caches)
+
+        test_labels = ('dA2', 'dW3', 'db3', 'dA1', 'dW2', 'db2', 'dA0', 'dW1', 'db1')
+        for gradient in test_labels:
+            with self.subTest(gradient = gradient):
+                self.assertTrue(np.allclose(grads[gradient], self.grads_expected[gradient]))
+
+    def test_calls_relu_activation_L_minus_1_times(self):
+        with unittest.mock.patch(
+            'deepen.model.relu_backward',
+            wraps = model.relu_backward
+        ) as relu_spy:
+            model.model_backward(self.Y_hat, self.Y, self.caches)
+
+            self.assertTrue(relu_spy.call_count == len(self.caches)  - 1)
+
+    def test_calls_sigmoid_activation_one_time(self):
+        with unittest.mock.patch(
+            'deepen.model.sigmoid_backward',
+            wraps = model.sigmoid_backward
+        ) as sigmoid_spy:
+            model.model_backward(self.Y_hat, self.Y, self.caches)
+
+            sigmoid_spy.assert_called_once()
+
 if __name__ == '__main__':
     unittest.main()

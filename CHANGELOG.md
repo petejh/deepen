@@ -11,6 +11,8 @@ This project uses [Semantic Versioning][sv].
 - Add `linear_backward()` to compute the linear part of backward propagation for
   a given layer.
 - Add `layer_backward()` to compute backward propagation for a single layer.
+- Add `model_backward()` to compute backward propagation for the complete model
+  comprising [L-1] ReLU units followed by a single, sigmoid unit.
 
 ### Changed
 
