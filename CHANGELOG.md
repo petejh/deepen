@@ -6,15 +6,20 @@ This project uses [Semantic Versioning][sv].
 ## [Unreleased][new]
 
 ### Added
+
+### Changed
+
+## [0.2.0][0.2.0] — 2020-03-30
+
+### Added
 - Add `relu_backward()` to compute backward propagation through a ReLU unit.
 - Add `sigmoid_backward()` to compute backward propagation through a sigmoid unit.
-- Add `linear_backward()` to compute the linear part of backward propagation for
-  a given layer.
-- Add `layer_backward()` to compute backward propagation for a single layer.
-- Add `model_backward()` to compute backward propagation for the complete model
-  comprising [L-1] ReLU units followed by a single, sigmoid unit.
+- Add `linear_backward()`, `layer_backward()`, and `model_backward()` to compute
+  backward propagation for the complete model comprising (L-1) ReLU units
+  followed by a single, sigmoid unit.
 - Add `update_params()` to calculate new weights and biases for each layer after
   a complete forward and backward pass through the model.
+- Add unit tests for all new functions.
 
 ### Changed
 
@@ -45,6 +50,7 @@ _This file is composed with [GitHub Flavored Markdown][gfm]._
 [gfm]: https://github.github.com/gfm/
 [sv]: https://semver.org
 
-[new]: https://github.com/petejh/deepen/compare/HEAD..v0.1.0
+[new]: https://github.com/petejh/deepen/compare/HEAD..v0.2.0
+[0.2.0]: https://github.com/petejh/deepen/releases/tag/v0.2.0
 [0.1.0]: https://github.com/petejh/deepen/releases/tag/v0.1.0
 [0.0.0]: https://github.com/petejh/deepen/releases/tag/v0.0.0
