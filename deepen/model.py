@@ -24,7 +24,9 @@ def initialize_params(layer_dims):
     L = len(layer_dims)
 
     for l in range(1, L):
-        params['W' + str(l)] = np.random.randn(layer_dims[l], layer_dims[l-1]) * 0.01
+        params['W' + str(l)] = (
+            np.random.randn(layer_dims[l], layer_dims[l-1]) / np.sqrt(layer_dims[l-1])
+        )
         params['b' + str(l)] = np.zeros((layer_dims[l], 1))
 
     return params
@@ -163,7 +165,7 @@ def compute_cost(Y_hat, Y):
 
     m = Y.shape[1]
 
-    cost = (-1/m) * np.sum(np.multiply(Y, np.log(Y_hat)) + np.multiply((1-Y), np.log(1-Y_hat)))
+    cost = (1./m) * (-np.dot(Y, np.log(Y_hat).T) - np.dot(1-Y, np.log(1-Y_hat).T))
     cost = np.squeeze(cost)
 
     return cost
@@ -315,3 +317,50 @@ def update_params(params, grads, learning_rate):
         params["b" + str(l+1)] -= learning_rate * grads["db" + str(l+1)]
 
     return params
+
+def learn(X, Y, layer_dims, learning_rate=0.0075, iterations=3000):
+    """Run the model.
+
+    Parameters
+    ----------
+    X : ndarray
+        Input data of shape (input size, number of examples).
+    Y : ndarray
+        Vector of true values of shape (1, number of examples).
+    layer_dims : list or tuple of int
+        The number of neurons in each layer of the network.
+    learning_rate : float in (0, 1]
+        Learning rate for the model.
+    iterations : int
+        Number of complete cycles of forward and back propagation to train the
+        model.
+
+    Returns
+    -------
+    tuple of (ndarray, list)
+
+        params : dict of {str: ndarray}
+            Final parameters for the trained model.
+
+            `Wl` : ndarray
+                Final weights matrix.
+            `bl` : ndarray
+                Final biases vector.
+
+        costs : list
+            The cost computed for each iteration of training.
+    """
+
+    costs = []
+    params = initialize_params(layer_dims)
+
+    for i in range(0, iterations):
+        Y_hat, caches = model_forward(X, params)
+
+        cost = compute_cost(Y_hat, Y)
+        costs.append(cost)
+
+        grads = model_backward(Y_hat, Y, caches)
+        params = update_params(params, grads, learning_rate)
+
+    return (params, costs)

@@ -6,8 +6,11 @@ This project uses [Semantic Versioning][sv].
 ## [Unreleased][new]
 
 ### Added
+- Add `learn()` to train the model.
 
 ### Changed
+- Weights are initialized to have standard deviation of ≈ 1.0 in each layer.
+- Rewrite the computation of the cost function for greater clarity.
 
 ## [0.2.0][0.2.0] — 2020-03-30
 
