@@ -319,7 +319,7 @@ def update_params(params, grads, learning_rate):
     return params
 
 def learn(X, Y, layer_dims, learning_rate=0.0075, iterations=3000):
-    """Run the model.
+    """Train the model.
 
     Parameters
     ----------
@@ -364,3 +364,23 @@ def learn(X, Y, layer_dims, learning_rate=0.0075, iterations=3000):
         params = update_params(params, grads, learning_rate)
 
     return (params, costs)
+
+def predict(X, params):
+    """Calculate predictions using the trained model.
+
+    Parameters
+    ----------
+    X : ndarray
+        Input data of shape (input size, number of examples).
+    params : dict of {str: ndarray}
+        Final parameters for the trained model.
+
+    Returns
+    -------
+    predictions : ndarray of {0 or 1}
+        Model predictions for the given input.
+    """
+
+    predictions, _ = model_forward(X, params)
+
+    return predictions.round()

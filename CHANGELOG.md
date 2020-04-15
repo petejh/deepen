@@ -7,6 +7,7 @@ This project uses [Semantic Versioning][sv].
 
 ### Added
 - Add `learn()` to train the model.
+- Add `predict()` to calculate predictions using the trained model.
 
 ### Changed
 - Weights are initialized to have standard deviation of ≈ 1.0 in each layer.
