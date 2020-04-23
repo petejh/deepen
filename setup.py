@@ -9,6 +9,6 @@ setup(
     author_email = 'petejh.code@q.com',
     license = 'MIT',
     packages = ['deepen'],
-    install_requires = ['numpy']
+    install_requires = ['numpy'],
     zip_safe = False
     )
