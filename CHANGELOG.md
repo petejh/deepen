@@ -5,22 +5,19 @@ This project uses [Semantic Versioning][sv].
 
 ## [Unreleased][new]
 
+## [0.3.0][0.3.0] — 2020-04-23
+
 ### Added
-- Add `learn()` to train the model.
-- Add `predict()` to calculate predictions using the trained model.
-- Create `deepen.propagation` module to provide functions supporting feedforward
-  and backward propagation.
-- Add a Model class with `learn()` and `predict()` methods.
-- Add unit tests for Model.
+- Create a Model class with `learn()` to train the model and `predict()` to
+  transform input data using the trained model.
+- Create the `deepen.propagation` module.
+- Add `requirements.txt` and indicate a dependency on `numpy` in `setup.py`.
 
 ### Changed
+- Move functions supporting feedforward processing and backpropagation to the
+  new `deepen.propagation` module.
 - Weights are initialized to have standard deviation of ≈ 1.0 in each layer.
 - Rewrite the computation of the cost function for greater clarity.
-- Move functions supporting feedforward and backward propagation to the new
-  propagation module.
-- Change `predict()` to fetch stored `params` from the model.
-- Change `learn()` to fetch stored `layer_dims` and `learning_rate` from the
-  model.
 
 ## [0.2.0][0.2.0] — 2020-03-30
 
@@ -63,7 +60,8 @@ _This file is composed with [GitHub Flavored Markdown][gfm]._
 [gfm]: https://github.github.com/gfm/
 [sv]: https://semver.org
 
-[new]: https://github.com/petejh/deepen/compare/HEAD..v0.2.0
+[new]: https://github.com/petejh/deepen/compare/HEAD..v0.3.0
+[0.3.0]: https://github.com/petejh/deepen/releases/tag/v0.3.0
 [0.2.0]: https://github.com/petejh/deepen/releases/tag/v0.2.0
 [0.1.0]: https://github.com/petejh/deepen/releases/tag/v0.1.0
 [0.0.0]: https://github.com/petejh/deepen/releases/tag/v0.0.0
