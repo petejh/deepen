@@ -2,7 +2,9 @@
 __pycache__/
 
 # build artifacts
+build/
 dist/
+deepen.egg-info
 
 # temporary files
 tmp/
