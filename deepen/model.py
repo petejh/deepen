@@ -43,6 +43,58 @@ class Model:
         """
         return self._params
 
+    def learn_generator(self, X, Y, iterations=3000, progress=1):
+        """Train the model. This generator function yields the model and cost
+        after each count of iterations given by `progress`.
+
+        Parameters
+        ----------
+        X : ndarray
+            Input data of shape (input size, number of examples).
+        Y : ndarray
+            Vector of true values of shape (1, number of examples).
+        iterations : int
+            Maximum number of complete cycles of forward and back propagation to
+            train the model.
+        progress : int in [0, iterations]
+            If non-zero, provide progress after each successive increment of the
+            given number of iterations.
+
+        Returns
+        -------
+        tuple of (int, ndarray, list)
+
+            i : int
+                Number of completed iterations.
+
+            params : dict of {str: ndarray}
+                Current parameters for the trained model.
+
+                `Wl` : ndarray
+                    Current weights matrix.
+                `bl` : ndarray
+                    Current biases vector.
+
+            cost : list
+                The cost computed for the current iteration of training.
+        """
+
+        # TODO: Throw error if progress < 0 or progress > iterations.
+
+        params = prop.initialize_params(self.layer_dims)
+
+        for i in range(1, iterations + 1):
+            Y_hat, caches = prop.model_forward(X, params)
+
+            cost = prop.compute_cost(Y_hat, Y)
+
+            grads = prop.model_backward(Y_hat, Y, caches)
+            params = prop.update_params(params, grads, self.learning_rate)
+            self._params = params
+
+            if progress and (i == 1 or i % progress == 0):
+                yield (i, params, cost)
+
     def learn(self, X, Y, iterations=3000):
         """Train the model.
 
@@ -53,39 +105,31 @@ class Model:
         Y : ndarray
             Vector of true values of shape (1, number of examples).
         iterations : int
-            Number of complete cycles of forward and back propagation to train the
-            model.
+            Number of complete cycles of forward and back propagation to train
+            the model.
 
         Returns
         -------
-        tuple of (ndarray, list)
+        list of tuple of (ndarray, list)
+            Parameters and cost after each iteration of training.
 
             params : dict of {str: ndarray}
-                Final parameters for the trained model.
+                The parameters computed after each iteration of training.
 
                 `Wl` : ndarray
-                    Final weights matrix.
+                    Weights matrix for layer `l`.
                 `bl` : ndarray
-                    Final biases vector.
+                    Biases vector for layer `l`.
 
             costs : list
-                The cost computed for each iteration of training.
+                The cost computed after each iteration of training.
         """
 
-        costs = []
-        params = prop.initialize_params(self.layer_dims)
-
-        for i in range(0, iterations):
-            Y_hat, caches = prop.model_forward(X, params)
-
-            cost = prop.compute_cost(Y_hat, Y)
-            costs.append(cost)
-
-            grads = prop.model_backward(Y_hat, Y, caches)
-            params = prop.update_params(params, grads, self.learning_rate)
-
-        self._params = params
-        return (params, costs)
+        return [
+            (params, cost)
+            for (_, params, cost)
+            in self.learn_generator(X, Y, iterations)
+        ]
 
     def predict(self, X):
         """Calculate predictions using the trained model.

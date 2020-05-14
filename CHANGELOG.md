@@ -5,6 +5,14 @@ This project uses [Semantic Versioning][sv].
 
 ## [Unreleased][new]
 
+### Added
+- Add `learn_generator()` to provide stepwise learning for the model, with
+  updated parameters and cost returned at a given interval of propagation cycles.
+
+### Changed
+- `learn()` returns a list of (params, cost) with one tuple for each complete
+  cycle of forward and back propagation.
+
 ## [0.3.0][0.3.0] — 2020-04-23
 
 ### Added
