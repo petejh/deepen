@@ -8,6 +8,7 @@ This project uses [Semantic Versioning][sv].
 ### Added
 - Add `learn_generator()` to provide stepwise learning for the model, with
   updated parameters and cost returned at a given interval of propagation cycles.
+- Add `save()` and `load()` to serialize/deserialize the model to a file.
 
 ### Changed
 - `learn()` returns a list of (params, cost) with one tuple for each complete

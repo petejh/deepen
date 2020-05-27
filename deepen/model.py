@@ -1,3 +1,5 @@
+import h5py as h5
+
 from deepen import propagation as prop
 
 class Model:
@@ -14,6 +16,7 @@ class Model:
 
         self.layer_dims = layer_dims
         self.learning_rate = learning_rate
+        self._params = {}
 
     @property
     def learning_rate(self):
@@ -42,6 +45,38 @@ class Model:
             Final parameters for the trained model.
         """
         return self._params
+
+    def save(self, datafile):
+        """Serialize the model and save this representation in the given datafile.
+
+        Parameters
+        ------
+        datafile : str
+            A valid absolute path to the data file.
+        """
+        with h5.File(datafile, 'w') as df:
+            df_params = df.create_group("params")
+            for k, v in self.params.items():
+                df_params.create_dataset(k, data=v)
+
+            df.create_dataset("learning_rate", data=self.learning_rate)
+            df.create_dataset("layer_dims", data=self.layer_dims)
+
+    def load(self, datafile):
+        """Deserialize the model from the given datafile.
+
+        Parameters
+        ------
+        datafile : str
+            A valid absolute path to the data file.
+        """
+        with h5.File(datafile, 'r') as df:
+            df_params = df.get("params")
+            for k in df_params.keys():
+                self._params[k] = df_params[k][:]
+
+            self.learning_rate = df["learning_rate"][()].item()
+            self.layer_dims = df["layer_dims"][:].tolist()
 
     def learn_generator(self, X, Y, iterations=3000, progress=1):
         """Train the model. This generator function yields the model and cost
