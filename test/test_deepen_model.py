@@ -1,5 +1,7 @@
+import io
 import unittest
 
+import h5py as h5
 import numpy as np
 
 from deepen import model
@@ -124,3 +126,70 @@ class DeepenModelLearnTest(unittest.TestCase):
         intermediates = self.testmodel.learn(self.X, self.Y, self.iterations)
 
         self.assertTrue(len(intermediates) == self.iterations)
+
+class DeepenModelSaveTest(unittest.TestCase):
+    def setUp(self):
+        self.testmodel = model.Model()
+        self.datafile = io.BytesIO()
+
+    def test_saves_all_properties(self):
+        self.testmodel.save(self.datafile)
+
+        with h5.File(self.datafile, 'r') as df:
+            for prop in ["learning_rate", "layer_dims", "params"]:
+                with self.subTest(prop = prop):
+                    self.assertTrue(prop in df)
+
+    def test_saves_the_learning_rate(self):
+        self.testmodel.save(self.datafile)
+
+        with h5.File(self.datafile, 'r') as df:
+            saved_rate = df["learning_rate"][()].item()
+
+        self.assertTrue(saved_rate == self.testmodel.learning_rate)
+
+    def tearDown(self):
+        self.datafile.close()
+
+class DeepenModelLoadTest(unittest.TestCase):
+    def setUp(self):
+        self.testmodel = model.Model()
+
+        self.learning_rate = 0.08
+        self.layer_dims = [1, 10, 1]
+        self.params = {
+            'W1': np.ones((10, 1)),
+            'b1': np.ones((10, 1))
+        }
+        self.datafile = io.BytesIO()
+
+        with h5.File(self.datafile, 'w') as df:
+            df.create_dataset("learning_rate", data=self.learning_rate)
+            df.create_dataset("layer_dims", data=self.layer_dims)
+            df.create_dataset("params/W1", data=self.params['W1'])
+            df.create_dataset("params/b1", data=self.params['b1'])
+
+    def test_loads_layer_dims_as_a_native_type(self):
+        # h5py loads data in numpy formats by default; we want native types
+        self.testmodel.load(self.datafile)
+
+        self.assertIs(type(self.testmodel.layer_dims), list)
+
+    def test_loads_learning_rate_as_a_native_type(self):
+        # h5py loads data in numpy formats by default; we want native types
+        self.testmodel.load(self.datafile)
+
+        self.assertIs(type(self.testmodel.learning_rate), float)
+
+    def test_loads_the_learning_rate(self):
+        self.testmodel.load(self.datafile)
+
+        self.assertTrue(self.testmodel.learning_rate == self.learning_rate)
+
+    def test_loads_all_params(self):
+        self.testmodel.load(self.datafile)
+
+        self.assertTrue(len(self.testmodel.params) == len(self.params))
+
+    def tearDown(self):
+        self.datafile.close()

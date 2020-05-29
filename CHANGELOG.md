@@ -5,6 +5,8 @@ This project uses [Semantic Versioning][sv].
 
 ## [Unreleased][new]
 
+## [0.4.0][0.4.0] — 2020-05-29
+
 ### Added
 - Add `learn_generator()` to provide stepwise learning for the model, with
   updated parameters and cost returned at a given interval of propagation cycles.
@@ -69,7 +71,8 @@ _This file is composed with [GitHub Flavored Markdown][gfm]._
 [gfm]: https://github.github.com/gfm/
 [sv]: https://semver.org
 
-[new]: https://github.com/petejh/deepen/compare/HEAD..v0.3.0
+[new]: https://github.com/petejh/deepen/compare/HEAD..v0.4.0
+[0.4.0]: https://github.com/petejh/deepen/releases/tag/v0.4.0
 [0.3.0]: https://github.com/petejh/deepen/releases/tag/v0.3.0
 [0.2.0]: https://github.com/petejh/deepen/releases/tag/v0.2.0
 [0.1.0]: https://github.com/petejh/deepen/releases/tag/v0.1.0
