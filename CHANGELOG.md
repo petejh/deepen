@@ -5,6 +5,19 @@ This project uses [Semantic Versioning][sv].
 
 ## [Unreleased][new]
 
+## Added
+- [Poetry][poetry] for package configuration and dependency management.
+- [pytest][pytest] for unit testing.
+- [tox][tox] for automated testing in isolated environments.
+
+## Changed
+- Restructured project with a `src-folder` layout to better accommodate
+  distribution as a library
+- Expanded `README.md` with Motivation, Usage, and Contributing/Setup details.
+
+## Removed
+- `setuptools` artifacts, including `setup.py` and `requirements.txt`
+
 ## [0.4.0][0.4.0] — 2020-05-29
 
 ### Added
